@@ -11,9 +11,9 @@ export default class divorceCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
 		const member = await args.pick('member').catch(() => null);
 
-        if (!member) return message.reply('Please mention a valid member');
-        
-        if(member.id === message.author.id) return message.reply("YOu cannot divorce yourself")
+		if (!member) return message.reply('Please mention a valid member');
+
+		if (member.id === message.author.id) return message.reply('YOu cannot divorce yourself');
 		const check = await MarriageSchema.findOne({ where: { partnerID: member.id } });
 
 		if (!check) return message.reply('You are not married to that person');

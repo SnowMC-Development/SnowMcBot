@@ -10,6 +10,7 @@ import { inspect } from 'util';
 	aliases: ['ev'],
 	description: 'Evals any JavaScript code',
 	quotes: [],
+	fullCategory: ['Owner'],
 	preconditions: ['OwnerOnly'],
 	flags: ['async', 'hidden', 'showHidden', 'silent', 's'],
 	options: ['depth']
