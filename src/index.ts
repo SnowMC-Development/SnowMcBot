@@ -1,7 +1,7 @@
 import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { sequelize } from './Database/mysql';
-import ModerationModel from './Database/models/ModerationModel';
+import { syncModels } from './Database/ModelSync';
 
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -32,7 +32,7 @@ const main = async () => {
 		client.logger.info('Connecting to database...');
 		await sequelize.authenticate();
 		client.logger.info('Connected to database');
-		ModerationModel.sync();
+		syncModels();
 	} catch (error) {
 		client.logger.fatal(error);
 		client.destroy();

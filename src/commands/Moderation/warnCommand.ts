@@ -16,12 +16,11 @@ export class banCommand extends Command {
 
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot warn ${member}.`);
 
-		
 		const embed = new MessageEmbed()
 			.setAuthor({ name: member.user.tag + ' has been warned from the server.', iconURL: member.user.displayAvatarURL() })
 			.setThumbnail(message.guild!.iconURL({ dynamic: true }) as string)
 			.addFields(
-				{ name: 'Reason', value: reason, inline: true},
+				{ name: 'Reason', value: reason, inline: true },
 				{ name: 'Moderator', value: message.author.tag, inline: true },
 				{ name: 'Date', value: new Date().toLocaleString(), inline: false }
 			);

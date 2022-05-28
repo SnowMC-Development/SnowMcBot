@@ -18,12 +18,11 @@ export class banCommand extends Command {
 
 		await member.ban({ reason });
 
-		
 		const embed = new MessageEmbed()
 			.setAuthor({ name: member.user.tag + ' has been banned from the server.', iconURL: member.user.displayAvatarURL() })
 			.setThumbnail(message.guild!.iconURL({ dynamic: true }) as string)
 			.addFields(
-				{ name: 'Reason', value: reason, inline: true},
+				{ name: 'Reason', value: reason, inline: true },
 				{ name: 'Moderator', value: message.author.tag, inline: true },
 				{ name: 'Date', value: new Date().toLocaleString(), inline: false }
 			);
