@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-
+import ModerationModel from '../../Database/models/ModerationModel';
 @ApplyOptions<CommandOptions>({
 	description: 'warns a member',
 	preconditions: ['ModOnly'],
@@ -15,6 +15,14 @@ export class banCommand extends Command {
 		if (!member || !reason) return message.reply(`Invalid usage: Please use, !warn <user> <reason>`);
 
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot warn ${member}.`);
+
+		ModerationModel.create({
+			guildId: message.guild?.id,
+			userId: member.id,
+			moderatorId: message.author.id,
+			reason: reason,
+			Casetype: 'Warn'
+		});
 
 		const embed = new MessageEmbed()
 			.setAuthor({ name: member.user.tag + ' has been warned from the server.', iconURL: member.user.displayAvatarURL() })
