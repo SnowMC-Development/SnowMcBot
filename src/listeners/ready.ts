@@ -1,8 +1,9 @@
-import type { ListenerOptions, PieceContext } from '@sapphire/framework';
-import { Listener, Store } from '@sapphire/framework';
+import { ListenerOptions, PieceContext, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import { Manager } from 'erela.js';
 
 const dev = process.env.NODE_ENV !== 'production';
+
 
 export class UserEvent extends Listener {
 	private readonly style = dev ? yellow : blue;
@@ -15,6 +16,40 @@ export class UserEvent extends Listener {
 	}
 
 	public run() {
+		const client = this.container.client;
+		const manager = new Manager({
+			// Pass an array of node. Note: You do not need to pass any if you are using the default values (ones shown below).
+			nodes: [
+				// If you pass a object like so the "host" property is required
+				{
+					host: '75.119.134.59', // Optional if Lavalink is local
+					port: 25501, // Optional if Lavalink is set to default
+					password: 'youshallnotpass' // Optional if Lavalink is set to default
+				}
+			],
+			// A send method to send data to the Discord WebSocket using your library.
+			// Getting the shard for the guild and sending the data to the WebSocket.
+			send(id, payload) {
+				const guild = client.guilds.cache.get(id);
+				if (guild) guild.shard.send(payload);
+			}
+		});
+
+		manager.on('nodeConnect', (node) => console.log(`Node ${node.options.identifier} connected`));
+		manager.on('nodeError', (node, error) => console.log(`Node ${node.options.identifier} had an error: ${error.message}`));
+		manager.on('trackStart', (player, track) => {
+			console.log(`Track ${track} started playing in ${player.guild}`);
+			//client.channels.cache.get(player.textChannel).send(`Now playing: ${track.title}`);
+		});
+		manager.on('queueEnd', (player) => {
+			console.log('Queue ended');
+
+			player.destroy();
+		});
+
+
+		manager.init(client.user?.id);
+
 		this.printBanner();
 		this.printStoreDebugInformation();
 	}

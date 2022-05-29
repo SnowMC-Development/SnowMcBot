@@ -2,6 +2,7 @@
 	"extends": "@sapphire/ts-config",
 	"compilerOptions": {
 		"noImplicitReturns": false,
+		"skipLibCheck": true,
 		"rootDir": "src",
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo"
