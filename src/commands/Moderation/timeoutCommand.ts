@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-
+import ModerationModel from '../../Database/models/ModerationModel';
 @ApplyOptions<CommandOptions>({
 	name: 'timeout',
 	description: 'Timeout a user from the server.',
@@ -20,6 +20,14 @@ export class UserCommand extends Command {
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot timeout ${member}.`);
 
 		member?.timeout(time * 60 * 1000, reason as string);
+
+		ModerationModel.create({
+			guildId: message.guild?.id,
+			userId: member.id,
+			moderatorId: message.author.id,
+			reason: reason,
+			Casetype: 'Timeout'
+		});
 
 		const embed = new MessageEmbed()
 			.setAuthor({ name: member.user.tag + ' has been timed out', iconURL: member.user.displayAvatarURL() })

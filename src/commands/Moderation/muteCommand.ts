@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-
+import ModerationModel from '../../Database/models/ModerationModel';
 @ApplyOptions<CommandOptions>({
 	description: 'Mute a user from the server.',
 	name: 'mute',
@@ -23,6 +23,14 @@ export class UserCommand extends Command {
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot mute ${member}.`);
 
 		await member.roles.add(role);
+
+		ModerationModel.create({
+			guildId: message.guild?.id,
+			userId: member.id,
+			moderatorId: message.author.id,
+			reason: reason,
+			Casetype: 'Mute'
+		});
 
 		const embed = new MessageEmbed()
 			.setAuthor({ name: member.user.tag + ' has been muted', iconURL: member.user.displayAvatarURL() })

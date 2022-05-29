@@ -21,7 +21,7 @@ export default class infractionsCommand extends Command {
 			.map((inf) => {
 				return [
 					`Case ID: ${inf.getDataValue('id')}`,
-					`Moderator: ${inf.getDataValue('moderatorID') || 'Failed to get ID'}`,
+					`Moderator: ${inf.getDataValue('moderatorId') || 'Failed to get ID'}`,
 					`Date: ${inf.getDataValue('createdAt')}`,
 					`Reason: ${inf.getDataValue('reason')}`,
 					`Case Type: ${inf.getDataValue('Casetype')}`
@@ -31,7 +31,7 @@ export default class infractionsCommand extends Command {
 
 		if (!infractions) return message.reply('That user has no infractions!');
 
-		const embed = new MessageEmbed().setDescription(infractions);
+		const embed = new MessageEmbed().setDescription(infractions).setColor('RANDOM');
 
 		message.channel.send({ embeds: [embed] });
 	}

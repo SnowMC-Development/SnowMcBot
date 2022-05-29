@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
+import ModerationModel from '../../Database/models/ModerationModel';
 
 @ApplyOptions<CommandOptions>({
 	description: 'Kick a user from the server.',
@@ -15,6 +16,14 @@ export class kickCommand extends Command {
 		if (!member || !reason) return message.reply(`Invalid usage: Please use, !kick <user> <reason>`);
 
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot kick ${member}.`);
+
+		ModerationModel.create({
+			guildId: message.guild?.id,
+			userId: member.id,
+			moderatorId: message.author.id,
+			reason: reason,
+			Casetype: 'Kick'
+		});
 
 		await member.kick(reason);
 

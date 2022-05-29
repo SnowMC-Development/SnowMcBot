@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-
+import ModerationModel from '../../Database/models/ModerationModel';
 @ApplyOptions<CommandOptions>({
 	description: 'ban a user from the server.',
 	preconditions: ['ModOnly'],
@@ -15,6 +15,14 @@ export class banCommand extends Command {
 		if (!member || !reason) return message.reply(`Invalid usage: Please use, !ban <user> <reason>`);
 
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot ban ${member}.`);
+
+		ModerationModel.create({
+			guildId: message.guild?.id,
+			userId: member.id,
+			moderatorId: message.author.id,
+			reason: reason,
+			Casetype: 'Ban'
+		});
 
 		await member.ban({ reason });
 
