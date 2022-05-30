@@ -3,7 +3,7 @@ import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { sequelize } from './Database/mysql';
 import { syncModels } from './Database/ModelSync';
 
-const client = new SapphireClient({
+export const client = new SapphireClient({
 	defaultPrefix: '!',
 	regexPrefix: /^(hey +)?bot[,! ]/i,
 	caseInsensitiveCommands: true,
