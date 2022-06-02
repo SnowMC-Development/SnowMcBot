@@ -51,7 +51,7 @@ export default class playCommand extends Command {
 			case 'SEARCH_RESULT':
 				let max = 5,
 					collected,
-					filter = (m:any) => m.author.id === message.author.id && /^(\d+|end)$/i.test(m.content);
+					filter = (m: any) => m.author.id === message.author.id && /^(\d+|end)$/i.test(m.content);
 				if (res.tracks.length < max) max = res.tracks.length;
 
 				const results = res.tracks

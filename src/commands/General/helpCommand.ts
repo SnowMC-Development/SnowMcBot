@@ -23,15 +23,18 @@ export default class helpCommand extends Command {
 			.setTimestamp();
 
 		if (command) {
-			const cmd = this.container.stores.get('commands');
+			const cmd: any = this.container.stores.get('commands');
 			if (!cmd) return message.channel.send(`Invalid Command named. \`${command}\``);
 			embed.setAuthor({
-				name: `${capitalise(cmd.name)}  Command Help`,
+				name: `${JSON.stringify(cmd.name)}  Command Help`,
 				iconURL: this.container.client.user?.displayAvatarURL({ dynamic: true }) as string
 			});
 			embed.setDescription(
-				`**❯ Aliases**: ${cmd.aliases ? cmd.aliases.map((alias: any) => `\`${alias}\``).join('') : 'None'} \n**❯ Category**: ${
-					cmd.categories
+				`**❯ Aliases**: ${JSON.stringify(
+					cmd.aliases ? cmd.aliases.map((alias: any) => `\`${alias}\``).join('') : 'None'
+				)} \n**❯ Category**: ${
+					//get the category of the command name
+					JSON.stringify(capitalise(cmd.name))
 				}`
 			);
 			return message.channel.send({ embeds: [embed] });
