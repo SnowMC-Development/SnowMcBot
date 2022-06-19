@@ -2,8 +2,8 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import ms from 'ms';
-import GiveawayModel from '../../Database/models/GiveawayModel';
-import schedule from 'node-schedule';
+//import GiveawayModel from '../../Database/models/GiveawayModel';
+
 @ApplyOptions<CommandOptions>({
 	name: 'gstart',
 	description: 'Starts a giveaway',
@@ -39,7 +39,7 @@ export default class giveawayCommand extends Command {
 			if (user.bot) return;
 			if (reaction.emoji.name === '👍') {
 				let endsOn = new Date(Date.now() + ms(duration));
-				const gembed = new MessageEmbed().setTitle(title).setColor('#ff0000').setDescription(`
+				const gembed = new MessageEmbed().setTitle(title).setColor('#ff0000').setThumbnail(message.guild?.iconURL() as string).setDescription(`
                         Prize: ${prize}\n
                         Number of winners: ${winners.toString()}\n
                         Ends on: ${endsOn}\n
@@ -47,52 +47,36 @@ export default class giveawayCommand extends Command {
                         `);
 				const gmsg = await channel.send({ embeds: [gembed] });
 				await gmsg.react('🎉');
+				
 				let messageId = gmsg.id;
-				let guildId = gmsg.guild?.id;
+				//let guildId = gmsg.guild?.id;
 				let channelId = gmsg.channel.id;
+				
 
-				const data = await GiveawayModel.create({
-					guildId,
-					messageId,
-					channelId,
-					title,
-					prize,
-					duration,
-					winners,
-					endsOn,
-					createdOn: new Date()
-				});
-				await data.save();
-
-				scheduleGiveaway(this.container.client, data);
 				message.reply('Giveaway started!');
+
+				setTimeout(async () => {
+					const channel = await this.container.client.channels.cache.get(channelId) as TextChannel;
+					if (channel) {
+						const message = await channel.messages.fetch(messageId);
+						if (message) { 
+							const { embeds, reactions } = message;
+							const reaction = reactions.cache.get('🎉');
+							const users = await reaction!.users.fetch();
+							let entries:any = users!.filter((user: any) => !user.bot);
+							entries = Object.entries(users);
+							console.log(entries);
+							const winners = entries[0];
+							if (embeds.length === 1) {
+								const embed = embeds[0];
+								embed.setDescription(`~~${embed.description}~~\n**CONGRATS TO: ${winners}**`);
+								await message.edit({ embeds: [embed] });
+							}
+						}
+					}
+				}, ms(duration));
 			} else {
 				message.reply('Giveaway cancelled!');
-			}
-		});
-	}
-}
-
-async function scheduleGiveaway(client: any, giveaways: any) {
-	for (let i = 0; i < giveaways.length; i++) {
-		const { channelId, messageId, endsOn } = giveaways[i];
-		console.log('Scheduling job for ' + endsOn);
-		schedule.scheduleJob(endsOn, async () => {
-			const channel = await client.channels.cache.get(channelId);
-			if (channel) {
-				const message = await channel.messages.fetch(messageId);
-				if (message) {
-					const { embeds, reactions } = message;
-					const reaction = reactions.cache.get('🎉');
-					const users = await reaction.users.fetch();
-					const entries = users.filter((user: any) => !user.bot).array();
-					const winners = entries[0];
-					if (embeds.length === 1) {
-						const embed = embeds[0];
-						embed.setDescription(`~~${embed.description}~~\n**CONGRATS TO: ${winners}**`);
-						await message.edit(embed);
-					}
-				}
 			}
 		});
 	}
