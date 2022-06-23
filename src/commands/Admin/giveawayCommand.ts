@@ -1,8 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
+import { codeBlock } from '@sapphire/utilities';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import ms from 'ms';
-//import GiveawayModel from '../../Database/models/GiveawayModel';
+import GiveawayModel from '../../Database/models/GiveawayModel';
 
 @ApplyOptions<CommandOptions>({
 	name: 'gstart',
@@ -39,7 +40,10 @@ export default class giveawayCommand extends Command {
 			if (user.bot) return;
 			if (reaction.emoji.name === '👍') {
 				let endsOn = new Date(Date.now() + ms(duration));
-				const gembed = new MessageEmbed().setTitle(title).setColor('#ff0000').setThumbnail(message.guild?.iconURL() as string).setDescription(`
+				const gembed = new MessageEmbed()
+					.setTitle(title)
+					.setColor('#ff0000')
+					.setThumbnail(message.guild?.iconURL() as string).setDescription(`
                         Prize: ${prize}\n
                         Number of winners: ${winners.toString()}\n
                         Ends on: ${endsOn}\n
@@ -47,29 +51,51 @@ export default class giveawayCommand extends Command {
                         `);
 				const gmsg = await channel.send({ embeds: [gembed] });
 				await gmsg.react('🎉');
-				
+
 				let messageId = gmsg.id;
-				//let guildId = gmsg.guild?.id;
+				let guildId = gmsg.guild?.id;
 				let channelId = gmsg.channel.id;
-				
 
 				message.channel.send('Giveaway started!');
 
 				setTimeout(async () => {
-					const channel = await this.container.client.channels.cache.get(channelId) as TextChannel;
+					const channel = (await this.container.client.channels.cache.get(channelId)) as TextChannel;
 					if (channel) {
 						let message = await channel.messages.fetch(messageId);
 						if (message) {
 							let reactions = message.reactions.cache.get('🎉');
 							let entries:any = reactions?.users.cache.filter((u) => !u.bot).random();
-							
+
 							const winner = entries?.username;
+							console.log(typeof(entries));
 							const { embeds } = message;
 							if (embeds.length === 1) {
 								const embed = embeds[0];
 								embed.setDescription(`~~${embed.description}~~\n**CONGRATS TO: ${winner ? winner : 'No one reacted..'}**`);
-								await message.edit({ embeds: [embed]});
+								await message.edit({ embeds: [embed] });
 							}
+
+							try {
+
+								const data = await GiveawayModel.create({
+									guildId,
+									messageId,
+									channelId,
+									title,
+									prize,
+									duration,
+									winners,
+									createdOn: Date.now(),
+									endsOn,
+									winner,
+									entries
+								});
+
+								data.save();
+							} catch (e) { 
+								message.channel.send(` ${codeBlock('typescript', e)}`)
+							}
+							
 						}
 					}
 				}, ms(duration));

@@ -11,6 +11,8 @@ export default class GiveawayModel extends Model {
 	winners!: Number;
 	endsOn!: Date;
 	createdOn!: Date;
+	winner!: string;
+	entries!: JSON
 }
 
 GiveawayModel.init(
@@ -23,7 +25,9 @@ GiveawayModel.init(
 		duration: { type: DataTypes.STRING, allowNull: false },
 		winners: { type: DataTypes.INTEGER, allowNull: false },
 		endsOn: { type: DataTypes.DATE, allowNull: false },
-		createdOn: { type: DataTypes.DATE, allowNull: false }
+		createdOn: { type: DataTypes.DATE, allowNull: false },
+		winner: { type: DataTypes.STRING, allowNull: false },
+		entries: { type: DataTypes.JSON, allowNull: false }
 	},
 	{ sequelize, tableName: 'Giveaways', timestamps: true }
 );
