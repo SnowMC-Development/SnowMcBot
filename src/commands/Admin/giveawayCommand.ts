@@ -53,24 +53,22 @@ export default class giveawayCommand extends Command {
 				let channelId = gmsg.channel.id;
 				
 
-				message.reply('Giveaway started!');
+				message.channel.send('Giveaway started!');
 
 				setTimeout(async () => {
 					const channel = await this.container.client.channels.cache.get(channelId) as TextChannel;
 					if (channel) {
-						const message = await channel.messages.fetch(messageId);
-						if (message) { 
-							const { embeds, reactions } = message;
-							const reaction = reactions.cache.get('🎉');
-							const users = await reaction!.users.fetch();
-							let entries:any = users!.filter((user: any) => !user.bot);
-							entries = Object.entries(users);
-							console.log(entries);
-							const winners = entries[0];
+						let message = await channel.messages.fetch(messageId);
+						if (message) {
+							let reactions = message.reactions.cache.get('🎉');
+							let entries:any = reactions?.users.cache.filter((u) => !u.bot).random();
+							
+							const winner = entries?.username;
+							const { embeds } = message;
 							if (embeds.length === 1) {
 								const embed = embeds[0];
-								embed.setDescription(`~~${embed.description}~~\n**CONGRATS TO: ${winners}**`);
-								await message.edit({ embeds: [embed] });
+								embed.setDescription(`~~${embed.description}~~\n**CONGRATS TO: ${winner ? winner : 'No one reacted..'}**`);
+								await message.edit({ embeds: [embed]});
 							}
 						}
 					}
