@@ -11,7 +11,7 @@ export function removeDuplicates<T extends Array<T>>(arr: T) {
     return [...new Set(arr)];
 };
 
-export const capitalise = async (string: any) => {
+export const capitalise = (string: any) => {
 	return string
 		.split(' ')
 		.map((str: any) => str.slice(0, 1).toUpperCase() + str.slice(1))

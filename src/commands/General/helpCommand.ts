@@ -13,7 +13,7 @@ const OWNERS = envParseArray('OWNERS');
 })
 export default class helpCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
-		const command = await args.pick('string').catch(() => null);
+		const command: any = await args.pick('string').catch(() => null);
 
 		const embed = new MessageEmbed()
 			.setColor('BLUE')
@@ -56,10 +56,10 @@ export default class helpCommand extends Command {
 						.map((cmd: any) => cmd.category)
 				);
 			} else {
-				categories = await removeDuplicates(this.container.stores.get('commands').map((cmd: any) => cmd.category));
+				categories = removeDuplicates(this.container.stores.get('commands').map((cmd: any) => cmd.category));
 			}
 			
-			for (const category of categories) {
+			for (const category of categories!) {
 				embed.addField(
 					`**${capitalise(category)}**`,
 					this.container.stores
