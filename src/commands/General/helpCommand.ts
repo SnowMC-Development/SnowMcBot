@@ -24,17 +24,14 @@ export default class helpCommand extends Command {
 
 		if (command) {
 			const cmd: any = this.container.stores.get('commands');
-			if (!cmd) return message.channel.send(`Invalid Command named. \`${command}\``);
+			if (!cmd.has(command)) return message.channel.send(`Command \`${command}\` not found.`);
 			embed.setAuthor({
 				name: `${command}  Command Help`,
 				iconURL: this.container.client.user?.displayAvatarURL({ dynamic: true }) as string
 			});
 
-
-			//console.log(cmd.get(command).aliases);
-
 			embed.setDescription(
-				`**❯ Aliases: ${cmd.get(command).aliases.map((a:any) => `\`${a}\``).join(', ')}**\n` + 
+				`**❯ Aliases: ${cmd.get(command).aliases.length ? cmd.get(command).aliases.map((a:any) => `\`${a}\``).join(', ') : 'No aliases found'}**\n` + 
 				`**❯ Description: ${cmd.get(command).description}**\n` +
 				`**❯ Category: ${capitalise(cmd.get(command).fullCategory[0])}**\n` 
 			);
