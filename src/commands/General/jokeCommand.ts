@@ -14,7 +14,7 @@ export default class extends Command {
 
 		try {
 			const embed = new MessageEmbed()
-				.setAuthor({ name: data.setup } as any)
+				.setAuthor({ name: `${data.setup}` } )
 				.setDescription(data.delivery)
 				.setColor('#FFA500')
 				.setFooter({ text: 'Powered by JokeAPI.dev' })
