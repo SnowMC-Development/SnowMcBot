@@ -12,7 +12,7 @@ export default class GiveawayModel extends Model {
 	endsOn!: Date;
 	createdOn!: Date;
 	winner!: string;
-	entries!: JSON
+	entries!: JSON;
 }
 
 GiveawayModel.init(

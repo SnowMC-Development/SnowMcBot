@@ -6,9 +6,11 @@ import ms from 'ms';
 import GiveawayModel from '../../Database/models/GiveawayModel';
 
 @ApplyOptions<CommandOptions>({
-	name: 'gstart',
+	name: 'giveawaystart',
 	description: 'Starts a giveaway',
-	aliases: ['giveawaystart']
+	aliases: ['gstart'],
+	fullCategory: ['Admin'],
+	preconditions: ['GuildOnly', 'AdminOnly']
 })
 export default class giveawayCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
@@ -64,10 +66,10 @@ export default class giveawayCommand extends Command {
 						let message = await channel.messages.fetch(messageId);
 						if (message) {
 							let reactions = message.reactions.cache.get('🎉');
-							let entries:any = reactions?.users.cache.filter((u) => !u.bot).random();
+							let entries: any = reactions?.users.cache.filter((u) => !u.bot).random();
 
 							const winner = entries?.username;
-							console.log(typeof(entries));
+							console.log(typeof entries);
 							const { embeds } = message;
 							if (embeds.length === 1) {
 								const embed = embeds[0];
@@ -76,7 +78,6 @@ export default class giveawayCommand extends Command {
 							}
 
 							try {
-
 								const data = await GiveawayModel.create({
 									guildId,
 									messageId,
@@ -92,10 +93,9 @@ export default class giveawayCommand extends Command {
 								});
 
 								data.save();
-							} catch (e) { 
-								message.channel.send(` ${codeBlock('typescript', e)}`)
+							} catch (e) {
+								message.channel.send(` ${codeBlock('typescript', e)}`);
 							}
-							
 						}
 					}
 				}, ms(duration));

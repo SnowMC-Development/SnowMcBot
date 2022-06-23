@@ -7,8 +7,8 @@ export const trimArray = (arr: any, maxLen = 10) => {
 	return arr;
 };
 
-export const removeDuplicates = async (arr: any) => {
-	return [...new Set(arr)];
+export function removeDuplicates<T extends Array<T>>(arr: T) {
+    return [...new Set(arr)];
 };
 
 export const capitalise = async (string: any) => {

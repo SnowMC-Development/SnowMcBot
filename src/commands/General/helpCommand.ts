@@ -26,22 +26,27 @@ export default class helpCommand extends Command {
 			const cmd: any = this.container.stores.get('commands');
 			if (!cmd) return message.channel.send(`Invalid Command named. \`${command}\``);
 			embed.setAuthor({
-				name: `${JSON.stringify(cmd.name)}  Command Help`,
+				name: `${command}  Command Help`,
 				iconURL: this.container.client.user?.displayAvatarURL({ dynamic: true }) as string
 			});
+
+
+			//console.log(cmd.get(command).aliases);
+
 			embed.setDescription(
-				`**❯ Aliases**: ${JSON.stringify(
-					cmd.aliases ? cmd.aliases.map((alias: any) => `\`${alias}\``).join('') : 'None'
-				)} \n**❯ Category**: ${
-					//get the category of the command name
-					JSON.stringify(capitalise(cmd.name))
-				}`
+				`**❯ Aliases: ${cmd.get(command).aliases.map((a:any) => `\`${a}\``).join(', ')}**\n` + 
+				`**❯ Description: ${cmd.get(command).description}**\n` +
+				`**❯ Category: ${capitalise(cmd.get(command).fullCategory[0])}**\n` 
 			);
-			return message.channel.send({ embeds: [embed] });
+
+			return message.channel.send({ embeds: [ embed ]});
 		} else {
 			embed.setDescription(
 				`These are the available commands for ${message.guild?.name}\n The bot's prefix is: ${this.container.client.options.defaultPrefix} \n Command Parameters: \`<>\` is strict & \`[]\` is optional`
 			);
+			
+
+			
 			let categories;
 			if (!OWNERS.includes(message.author.id)) {
 				categories = await removeDuplicates(
@@ -53,7 +58,7 @@ export default class helpCommand extends Command {
 			} else {
 				categories = await removeDuplicates(this.container.stores.get('commands').map((cmd: any) => cmd.category));
 			}
-
+			
 			for (const category of categories) {
 				embed.addField(
 					`**${capitalise(category)}**`,
