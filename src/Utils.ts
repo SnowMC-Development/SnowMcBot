@@ -8,8 +8,8 @@ export const trimArray = (arr: any, maxLen = 10) => {
 };
 
 export function removeDuplicates<T extends Array<T>>(arr: T) {
-    return [...new Set(arr)];
-};
+	return [...new Set(arr)];
+}
 
 export const capitalise = (string: any) => {
 	return string

@@ -12,14 +12,11 @@ import moment from 'moment';
 })
 export default class statsCommand extends Command {
 	public async messageRun(message: Message) {
-		
-
-		let client = new Client(API_KEY)
+		let client = new Client(API_KEY);
 		let player = await client.players.fetch('btsp');
 		let firstLogin = new Date(player.firstLogin);
 		let lastLogin = new Date(player.lastLogin);
 		const skin = await mcapi.skin('btsp');
-
 
 		const embed = new MessageEmbed()
 			.setAuthor({ name: `User info for ${player.displayname}` })
@@ -32,13 +29,12 @@ export default class statsCommand extends Command {
 				{ name: 'Network Exp', value: `${player.networkExp}`, inline: true },
 				{ name: 'Bedwars Games', value: `${player.stats.Bedwars.games_played_bedwars}`, inline: true },
 				{ name: 'Bedwars wins', value: `${player.stats.Bedwars.wins_bedwars}`, inline: true },
-				{ name: "Bedwars Kils", value: `${player.stats.Bedwars.kills_bedwars}`, inline: true },
+				{ name: 'Bedwars Kils', value: `${player.stats.Bedwars.kills_bedwars}`, inline: true },
 				{ name: 'Duels Games', value: `${player.stats.Duels.games_played_duels}`, inline: true },
 				{ name: 'Duels wins', value: `${player.stats.Duels.wins}`, inline: true },
-				{ name: "Duels Kils", value: `${player.stats.Duels.kills}`, inline: true},
-		)
-			.setThumbnail(`${skin.sideview}`)
+				{ name: 'Duels Kils', value: `${player.stats.Duels.kills}`, inline: true }
+			)
+			.setThumbnail(`${skin.sideview}`);
 		return message.channel.send({ embeds: [embed] });
-				
 	}
 }

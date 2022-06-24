@@ -6,3 +6,4 @@ export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
 	dialect: 'mysql',
 	port: 3306
 });
+

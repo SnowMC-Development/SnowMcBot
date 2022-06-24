@@ -31,19 +31,24 @@ export default class helpCommand extends Command {
 			});
 
 			embed.setDescription(
-				`**❯ Aliases: ${cmd.get(command).aliases.length ? cmd.get(command).aliases.map((a:any) => `\`${a}\``).join(', ') : 'No aliases found'}**\n` + 
-				`**❯ Description: ${cmd.get(command).description}**\n` +
-				`**❯ Category: ${capitalise(cmd.get(command).fullCategory[0])}**\n` 
+				`**❯ Aliases: ${
+					cmd.get(command).aliases.length
+						? cmd
+								.get(command)
+								.aliases.map((a: any) => `\`${a}\``)
+								.join(', ')
+						: 'No aliases found'
+				}**\n` +
+					`**❯ Description: ${cmd.get(command).description}**\n` +
+					`**❯ Category: ${capitalise(cmd.get(command).fullCategory[0])}**\n`
 			);
 
-			return message.channel.send({ embeds: [ embed ]});
+			return message.channel.send({ embeds: [embed] });
 		} else {
 			embed.setDescription(
 				`These are the available commands for ${message.guild?.name}\n The bot's prefix is: ${this.container.client.options.defaultPrefix} \n Command Parameters: \`<>\` is strict & \`[]\` is optional`
 			);
-			
 
-			
 			let categories;
 			if (!OWNERS.includes(message.author.id)) {
 				categories = await removeDuplicates(
@@ -55,7 +60,7 @@ export default class helpCommand extends Command {
 			} else {
 				categories = removeDuplicates(this.container.stores.get('commands').map((cmd: any) => cmd.category));
 			}
-			
+
 			for (const category of categories!) {
 				embed.addField(
 					`**${capitalise(category)}**`,
