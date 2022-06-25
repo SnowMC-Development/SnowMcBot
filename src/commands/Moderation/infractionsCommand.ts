@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import {ModerationModel} from '../../Database/models/ModerationModel';
+import { ModerationModel } from '../../Database/models/ModerationModel';
 
 @ApplyOptions<CommandOptions>({
 	description: 'Get infractions of a user',
@@ -18,7 +18,7 @@ export default class infractionsCommand extends Command {
 		const data = await ModerationModel.findAll({ where: { userID: member.id } });
 
 		const infractions = data
-			.map((inf:any) => {
+			.map((inf: any) => {
 				return [
 					`Case ID: ${inf.getDataValue('id')}`,
 					`Moderator: ${inf.getDataValue('moderatorId') || 'Failed to get ID'}`,

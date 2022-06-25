@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptions, Args } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import {MarriageSchema} from '../../Database/models/MarrySchema';
+import { MarriageSchema } from '../../Database/models/MarrySchema';
 import { trimArray } from '../../Utils';
 
 const flags: any = {

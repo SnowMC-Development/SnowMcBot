@@ -1,6 +1,7 @@
 import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { sequelize } from './Database/mysql';
+import { syncModels } from './Database/ModelSync';
 
 export const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -31,6 +32,8 @@ const main = async () => {
 		client.logger.info('Connecting to database...');
 		await sequelize.authenticate();
 		client.logger.info('Connected to database');
+		syncModels();
+		client.logger.info('All models have been synced');
 	} catch (error) {
 		client.logger.fatal(error);
 		client.destroy();

@@ -13,23 +13,19 @@ export class UserEvent extends Listener {
 	}
 
 	public async run(member: GuildMember) {
-		if (member.user.bot) {
-			GuildModel.create({
-				guildname: member.guild.name,
-				guildid: member.guild.id,
-				guildowner: member.guild.ownerId,
-				guildroles: member.guild.roles.cache.size
-			});
-		}
+		const data = await GuildModel.findOne({ where: { guildId: member.guild.id } });
 
-		const user = await LevelModel.findOne({ where: { userId: member.id } })
-		
-		if (!user) { 
+		data?.update({ guildMembers: member.guild.memberCount });
+
+		const user = await LevelModel.findOne({ where: { userId: member.id } });
+
+		if (!user) {
 			const data = await LevelModel.create({
 				userId: member.id,
 				level: 1,
 				xp: 0,
-				totalxp: 0
+				totalxp: 0,
+				guildId: member.guild.id
 			});
 
 			data.save();
