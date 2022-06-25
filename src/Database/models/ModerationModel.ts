@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../mysql';
 
-export default class ModerationModel extends Model {
+export class ModerationModel extends Model {
 	id!: number;
 	guildId!: string;
 	userId!: string;

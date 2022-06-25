@@ -1,7 +1,7 @@
 import { sequelize } from '../mysql';
 import { Model, DataTypes } from 'Sequelize';
 
-export default class MarriageSchema extends Model {
+export class MarriageSchema extends Model {
 	userID!: string;
 	partnerID!: string;
 	guildID!: string;

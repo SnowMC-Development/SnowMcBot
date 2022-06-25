@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import ModerationModel from '../../Database/models/ModerationModel';
+import {ModerationModel} from '../../Database/models/ModerationModel';
 @ApplyOptions<CommandOptions>({
 	description: 'warns a member',
 	preconditions: ['ModOnly'],

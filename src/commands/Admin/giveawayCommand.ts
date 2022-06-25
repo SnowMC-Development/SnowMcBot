@@ -3,7 +3,7 @@ import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import ms from 'ms';
-import GiveawayModel from '../../Database/models/GiveawayModel';
+import { GiveawayModel } from '../../Database/models/GiveawayModel';
 
 @ApplyOptions<CommandOptions>({
 	name: 'giveawaystart',

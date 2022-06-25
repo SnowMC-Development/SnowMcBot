@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import MarriageSchema from '../../Database/models/MarrySchema';
+import {MarriageSchema} from '../../Database/models/MarrySchema';
 
 @ApplyOptions<CommandOptions>({
 	description: 'divorce your partner',

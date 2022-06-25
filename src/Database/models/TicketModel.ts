@@ -1,7 +1,7 @@
 import { sequelize } from '../mysql';
 import { Model, DataTypes } from 'sequelize';
 
-export default class TicketSchema extends Model {
+export class TicketSchema extends Model {
 	ticketID!: number;
 	guildID!: string;
 	userID!: string;

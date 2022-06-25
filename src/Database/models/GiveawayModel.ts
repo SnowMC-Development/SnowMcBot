@@ -1,7 +1,7 @@
 import { sequelize } from '../mysql';
 import { Model, DataTypes } from 'Sequelize';
 
-export default class GiveawayModel extends Model {
+export class GiveawayModel extends Model {
 	guildId!: string;
 	messageId!: string;
 	channelId!: string;
