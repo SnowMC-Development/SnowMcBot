@@ -1,5 +1,5 @@
 import { sequelize } from '../mysql';
-import { Model, DataTypes } from 'Sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 export class MarriageSchema extends Model {
 	userID!: string;
