@@ -13,9 +13,7 @@ export class UserEvent extends Listener {
 
 		const randomXp = Math.floor(Math.random() * 3);
 		const currentXpStats = await LevelModel.findOne({ where: { guildId: message.guild!.id } });
-		const mentionRegex = RegExp(`^<@!?${this.container.client.user!.id}>$`);
-		if (message.content.match(mentionRegex)) message.channel.send(`My prefix for ${message.guild!.name} is \`${this.container.client.options.defaultPrefix}\`.`);
-
+		
 
 		if (currentXpStats) {
 			let xp = currentXpStats.getDataValue('xp');

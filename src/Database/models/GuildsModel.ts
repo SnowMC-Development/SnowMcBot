@@ -7,6 +7,7 @@ export class GuildModel extends Model {
 	guildOwner!: string;
 	guildRoles!: string;
 	guildMembers!: string;
+	guildprefix!: string;
 }
 
 GuildModel.init(
@@ -15,7 +16,8 @@ GuildModel.init(
 		guildid: { type: DataTypes.STRING, allowNull: false },
 		guildowner: { type: DataTypes.STRING, allowNull: false },
 		guildroles: { type: DataTypes.STRING, allowNull: false },
-		guildmembers: { type: DataTypes.STRING, allowNull: false }
+		guildmembers: { type: DataTypes.STRING, allowNull: false },
+		guildprefix: { type: DataTypes.STRING, allowNull: false }
 	},
 	{ sequelize, timestamps: true, tableName: 'guilds' }
 );

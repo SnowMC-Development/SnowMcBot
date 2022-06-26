@@ -21,7 +21,8 @@ export class createGuildSchema extends Command {
 			guildid: message.guild!.id,
 			guildowner: message.guild!.ownerId,
 			guildroles: message.guild!.roles.cache.size,
-			guildmembers: message.guild!.memberCount
+			guildmembers: message.guild!.memberCount,
+			guildprefix: this.container.client.options.defaultPrefix
 		});
 
 		guild.save();
