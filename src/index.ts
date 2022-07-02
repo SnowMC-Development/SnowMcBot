@@ -4,7 +4,7 @@ import { sequelize } from './Database/mysql';
 import { syncModels } from './Database/ModelSync';
 
 export const client = new SapphireClient({
-	defaultPrefix: "s!",
+	defaultPrefix: 's!',
 	caseInsensitiveCommands: true,
 	logger: {
 		level: LogLevel.Debug

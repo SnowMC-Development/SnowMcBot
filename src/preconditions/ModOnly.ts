@@ -6,8 +6,7 @@ const OWNERS = envParseArray('OWNERS');
 
 export class UserPrecondition extends Precondition {
 	public async run(message: Message) {
-	
-		return message.member?.permissions.has("BAN_MEMBERS")|| OWNERS.includes(message.author.id) 
+		return message.member?.permissions.has('BAN_MEMBERS') || OWNERS.includes(message.author.id)
 			? this.ok()
 			: this.error({ message: 'This command can only be used by moderators.' });
 	}
