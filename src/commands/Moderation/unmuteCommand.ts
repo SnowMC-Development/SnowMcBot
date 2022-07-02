@@ -14,12 +14,6 @@ export class UserCommand extends Command {
 
 		if (!member ) return message.reply(`Invalid usage: Please use, !mute <user> `);
 
-		if (!role) {
-			await message.guild?.roles.create({ name: 'Muted', color: 'BLURPLE', mentionable: false });
-			message.channel.send(`Couldn't find the muted role so I created one for you!`);
-		}
-
-		if (!member.roles.cache.has(role)) return message.reply(`You cannot unmute ${member}.`);
 
 		await member.roles.remove(role);
 
@@ -30,7 +24,7 @@ export class UserCommand extends Command {
 			.setThumbnail(message.guild!.iconURL({ dynamic: true }) as string)
 			.addFields(
 				{ name: 'Moderator', value: message.author.tag, inline: true },
-				{ name: 'Date', value: new Date().toLocaleString(), inline: false }
+				{ name: 'Date', value: new Date().toLocaleString(), inline: true }
 			);
 
 		return message.channel.send({ embeds: [embed] });
