@@ -10,13 +10,15 @@ import { inspect } from 'util';
 	aliases: ['ev'],
 	description: 'Evals any JavaScript code',
 	quotes: [],
+	fullCategory: ['Owner'],
 	preconditions: ['OwnerOnly'],
 	flags: ['async', 'hidden', 'showHidden', 'silent', 's'],
 	options: ['depth']
 })
 export class UserCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
-		const code = await args.rest('string');
+		const code: any = await args.rest('string').catch(() => null);
+		if (!code) return message.reply('Please provide some code to evaluate.');
 
 		const { result, success, type } = await this.eval(message, code, {
 			async: args.getFlags('async'),

@@ -1,6 +1,6 @@
-import type { ListenerOptions, PieceContext } from '@sapphire/framework';
-import { Listener, Store } from '@sapphire/framework';
+import { ListenerOptions, PieceContext, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import Erelajs from '../Erelajs';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -17,6 +17,24 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
+
+		Erelajs.manager.on('nodeConnect', (node) => {
+			this.container.logger.info(`Node ${node.options.identifier} connected.`);
+		});
+
+		Erelajs.manager.on('nodeDisconnect', (node) => {
+			this.container.logger.info(`Node ${node.options.identifier} disconnected.`);
+		});
+
+		Erelajs.manager.on('nodeError', (node, error) => {
+			this.container.logger.error(`Node ${node.options.identifier} errored: ${error}`);
+		});
+
+		Erelajs.manager.on('nodeReconnect', async (node) => {
+			console.log('Node Reconnecting: %s', node.options.identifier);
+		});
+
+		Erelajs.manager.init(this.container.client.id as string);
 	}
 
 	private printBanner() {
