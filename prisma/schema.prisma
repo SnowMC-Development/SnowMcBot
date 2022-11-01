@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Infraction {
+  id          Int            @id @default(autoincrement())
+  offenderId  String         @map("offender_id")
+  moderatorId String         @map("moderator_id")
+  messageId   String?        @map("message_id")
+  reason      String
+  createdAt   DateTime       @default(now())
+  type        InfractionType
+  @@map("infraction")
+}
+
+enum InfractionType {
+  Warn
+  Ban
+  SoftBan
+  Kick
+  Mute
+  UnBan
+  UnMute
+  Timeout
+}
+

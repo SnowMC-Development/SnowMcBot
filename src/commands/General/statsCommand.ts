@@ -2,9 +2,11 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
 import { Client } from 'hypixel.ts';
-import { API_KEY } from '../../config';
 import mcapi from 'minecraft-lookup';
 import moment from 'moment';
+
+const API_KEY = "dfsjkflsdfdsf"
+
 @ApplyOptions<CommandOptions>({
 	description: 'Hypixel stats',
 	name: 'stats',

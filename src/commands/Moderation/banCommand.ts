@@ -1,27 +1,27 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import { ModerationModel } from '../../Database/models/ModerationModel';
+import { PrismaClient } from '@prisma/client';
+
 @ApplyOptions<CommandOptions>({
-	description: 'ban a user from the server.',
+	description: 'bans a member from the guild',
+	name: 'ban',
 	preconditions: ['ModOnly'],
-	name: 'ban'
+	fullCategory: ['Moderation']
 })
-export class banCommand extends Command {
+export class UserCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
+		const prisma: PrismaClient = new PrismaClient();
 		const member = await args.pick('member').catch(() => null);
 		const reason = await args.rest('string').catch(() => null);
 
-		if (!member || !reason) return message.reply(`Invalid usage: Please use, !ban <user> <reason>`);
+		if (!member) return message.reply('You must provide a member');
+		if (!reason) return message.reply('You must provide a reason');
 
 		if (member.roles.highest.position >= message.member!.roles.highest.position) return message.reply(`You cannot ban ${member}.`);
 
-		ModerationModel.create({
-			guildId: message.guild?.id,
-			userId: member.id,
-			moderatorId: message.author.id,
-			reason: reason,
-			Casetype: 'Ban'
+		const schema = await prisma.infraction.create({
+			data: { moderatorId: message.author.id, offenderId: member.id, reason, type: 'Ban', messageId: message.id }
 		});
 
 		await member.ban({ reason });
@@ -32,7 +32,7 @@ export class banCommand extends Command {
 			.addFields(
 				{ name: 'Reason', value: reason, inline: true },
 				{ name: 'Moderator', value: message.author.tag, inline: true },
-				{ name: 'Date', value: new Date().toLocaleString(), inline: false }
+				{ name: 'Date', value: schema.createdAt.toString(), inline: false }
 			);
 
 		return message.channel.send({ embeds: [embed] });
